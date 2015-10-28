@@ -1,6 +1,6 @@
 {
   "name": "hubot-merge-spam",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Periodically announce to the channel what merge requests are available. Also print them on demand. Supports both GitLab's Merge Requests and GitHubs Pull Requests.",
   "main": "index.js",
   "scripts": {

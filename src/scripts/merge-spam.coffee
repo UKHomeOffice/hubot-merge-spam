@@ -81,8 +81,24 @@ getPullRequestsForOrganisation = (organsation, callback) ->
 sayPullRequests = (say, pullRequests) ->
   message = pullRequests.length+" Pull Requests Waiting\n\u{2001}\n"
 
+  pullRequests.sort(
+    (a, b) ->
+      aDate = new Date(a.updated_at).getTime()
+      bDate = new Date(b.updated_at).getTime()
+
+      return 0 if aDate == bDate
+      return -1 if aDate < bDate
+      return 1 if aDate > bDate
+  )
+
+
   for pullRequest in pullRequests
-    message += "\u{2B50} #{pullRequest.base.repo.full_name}##{pullRequest.number} #{pullRequest.title}\n"
+    if((new Date()).getTime() + (3 * 24 * 60 * 60 * 1000) > new Date(a.updated_at).getTime())
+      message += "\u{2B50}"
+    else
+      message += "\u{1F557} OLD! MERGE ME SOON"
+
+    message += "#{pullRequest.base.repo.full_name}##{pullRequest.number} #{pullRequest.title}\n"
     message += "\u{1F517} #{pullRequest.html_url}\n"
     message += "\u{1F464} #{pullRequest.user.login}"
     message += " \u{1F50D} #{pullRequest.assignee.login}" if pullRequest.assignee
@@ -122,8 +138,23 @@ getMergeRequestForOrganisation = (callback) ->
 sayMergeRequests = (say, mergeRequests) ->
   message = mergeRequests.length+" Merge Requests Waiting\n\u{2001}\n"
 
+  pullRequests.sort(
+    (a, b) ->
+      aDate = new Date(a.updated_at).getTime()
+      bDate = new Date(a.updated_at).getTime()
+
+      return 0 if aDate == bDate
+      return -1 if aDate < bDate
+      return 1 if aDate > bDate
+  )
+
   for mergeRequest in mergeRequests
-    message += "\u{2B50} #{mergeRequest.project.name_with_namespace}##{mergeRequest.iid} #{mergeRequest.title}\n"
+    if((new Date()).getTime() + (3 * 24 * 60 * 60 * 1000) > new Date(a.updated_at).getTime())
+      message += "\u{2B50}"
+    else
+      message += "\u{1F557} OLD! MERGE ME SOON"
+
+    message += " #{mergeRequest.project.name_with_namespace}##{mergeRequest.iid} #{mergeRequest.title}\n"
     message += "\u{1F517} #{mergeRequest.project.web_url}/merge_requests/#{mergeRequest.iid}\n"
     message += "\u{1F464} #{mergeRequest.author.username}"
     message += " \u{1F50D} #{mergeRequest.assignee.username}" if mergeRequest.assignee
