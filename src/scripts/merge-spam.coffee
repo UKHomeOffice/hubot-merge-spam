@@ -1,3 +1,22 @@
+# Description
+#   A Hubot script that lists the pull requests
+#
+# Configuration:
+#   HUBOT_MERGE_SPAM_ANNOUNCE_ROOMS
+#   HUBOT_MERGE_SPAM_CRON
+#   HUBOT_MERGE_SPAM_GITHUB_AUTH_USERNAME
+#   HUBOT_MERGE_SPAM_GITHUB_AUTH_PASSWORD
+#   HUBOT_MERGE_SPAM_GITLAB_HOST
+#   HUBOT_MERGE_SPAM_GITLAB_API_TOKEN
+#
+# Commands:
+#   hubot list pr - List pull requests from GitHub
+#   hubot list mr - List merge requests from GitLab
+#
+# Author:
+#   Billie Thompson <billie@purplebooth.co.uk>
+#
+
 Github = require('github-api');
 async = require('async');
 gitlab = null
