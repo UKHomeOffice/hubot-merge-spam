@@ -93,7 +93,7 @@ sayPullRequests = (say, pullRequests) ->
 
 
   for pullRequest in pullRequests
-    if((new Date()).getTime() + (3 * 24 * 60 * 60 * 1000) > new Date(a.updated_at).getTime())
+    if((new Date()).getTime() + (3 * 24 * 60 * 60 * 1000) > new Date(pullRequest.updated_at).getTime())
       message += "\u{2B50}"
     else
       message += "\u{1F557} OLD! MERGE ME SOON"
@@ -138,7 +138,7 @@ getMergeRequestForOrganisation = (callback) ->
 sayMergeRequests = (say, mergeRequests) ->
   message = mergeRequests.length+" Merge Requests Waiting\n\u{2001}\n"
 
-  pullRequests.sort(
+  mergeRequests.sort(
     (a, b) ->
       aDate = new Date(a.updated_at).getTime()
       bDate = new Date(a.updated_at).getTime()
@@ -149,7 +149,7 @@ sayMergeRequests = (say, mergeRequests) ->
   )
 
   for mergeRequest in mergeRequests
-    if((new Date()).getTime() + (3 * 24 * 60 * 60 * 1000) > new Date(a.updated_at).getTime())
+    if((new Date()).getTime() + (3 * 24 * 60 * 60 * 1000) > new Date(mergeRequest.updated_at).getTime())
       message += "\u{2B50}"
     else
       message += "\u{1F557} OLD! MERGE ME SOON"
