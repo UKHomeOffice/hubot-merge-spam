@@ -1,4 +1,4 @@
-# GH Review 
+# Hubot Merge Spam
 
 [![Build Status](https://travis-ci.org/UKHomeOffice/hubot-merge-spam.svg?branch=master)](https://travis-ci.org/UKHomeOffice/hubot-merge-spam) [![npm version](https://badge.fury.io/js/hubot-merge-spam.svg)](https://badge.fury.io/js/hubot-merge-spam)
 
