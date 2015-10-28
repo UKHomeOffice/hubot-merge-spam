@@ -93,12 +93,12 @@ sayPullRequests = (say, pullRequests) ->
 
 
   for pullRequest in pullRequests
-    if((new Date()).getTime() + (3 * 24 * 60 * 60 * 1000) > new Date(pullRequest.updated_at).getTime())
+    if((new Date()).getTime() - (3 * 24 * 60 * 60 * 1000) < new Date(pullRequest.updated_at).getTime())
       message += "\u{2B50}"
     else
       message += "\u{1F557} OLD! MERGE ME SOON"
 
-    message += "#{pullRequest.base.repo.full_name}##{pullRequest.number} #{pullRequest.title}\n"
+    message += " #{pullRequest.base.repo.full_name}##{pullRequest.number} #{pullRequest.title}\n"
     message += "\u{1F517} #{pullRequest.html_url}\n"
     message += "\u{1F464} #{pullRequest.user.login}"
     message += " \u{1F50D} #{pullRequest.assignee.login}" if pullRequest.assignee
@@ -149,7 +149,7 @@ sayMergeRequests = (say, mergeRequests) ->
   )
 
   for mergeRequest in mergeRequests
-    if((new Date()).getTime() + (3 * 24 * 60 * 60 * 1000) > new Date(mergeRequest.updated_at).getTime())
+    if((new Date()).getTime() - (3 * 24 * 60 * 60 * 1000) < new Date(mergeRequest.updated_at).getTime())
       message += "\u{2B50}"
     else
       message += "\u{1F557} OLD! MERGE ME SOON"
