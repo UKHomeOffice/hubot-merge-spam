@@ -13,15 +13,15 @@ This is a plugin to Hubot
 5:34:09 PM <•dec4rd> @purplebooth: Listing Merge Requests
 5:34:09 PM <•dec4rd>  
 5:34:09 PM <•dec4rd> ⭐ API-Factory / data-assurance-dataimport#3 Added standard format
-5:34:09 PM <•dec4rd> ⭐🔗 https://gitlab.digital.homeoffice.gov.uk/API-Factory/data-assurance-dataimport/merge_requests/3 
+5:34:09 PM <•dec4rd> 🔗 https://gitlab.digital.homeoffice.gov.uk/API-Factory/data-assurance-dataimport/merge_requests/3 
 5:34:09 PM <•dec4rd> 👤 purplebooth
 5:34:09 PM <•dec4rd>  
 5:34:09 PM <•dec4rd> ⭐ API-Factory / data-assurance-api#9 This should cause a test to fail
-5:34:09 PM <•dec4rd> ⭐🔗 https://gitlab.digital.homeoffice.gov.uk/API-Factory/data-assurance-api/merge_requests/9 
+5:34:09 PM <•dec4rd> 🔗 https://gitlab.digital.homeoffice.gov.uk/API-Factory/data-assurance-api/merge_requests/9 
 5:34:09 PM <•dec4rd> 👤 mikeyhu
 5:34:09 PM <•dec4rd>  
 5:34:09 PM <•dec4rd> ⭐ API-Factory / data-assurance-api#7 Standardise on coding style
-5:34:09 PM <•dec4rd> ⭐🔗 https://gitlab.digital.homeoffice.gov.uk/API-Factory/data-assurance-api/merge_requests/7 
+5:34:09 PM <•dec4rd> 🔗 https://gitlab.digital.homeoffice.gov.uk/API-Factory/data-assurance-api/merge_requests/7 
 5:34:09 PM <•dec4rd> 👤 purplebooth
 5:34:09 PM <•dec4rd>  
 ```
@@ -31,39 +31,21 @@ This is a plugin to Hubot
 9:23:35 AM <•dec4rd> @purplebooth: Listing Pull Requests
 9:23:35 AM <•dec4rd>  
 9:23:35 AM <•dec4rd> ⭐ UKHomeOffice/passports-form-wizard#31 Support for multiple translators
-9:23:35 AM <•dec4rd> ⭐🔗 https://github.com/UKHomeOffice/passports-form-wizard/pull/31 
+9:23:35 AM <•dec4rd> 🔗 https://github.com/UKHomeOffice/passports-form-wizard/pull/31 
 9:23:35 AM <•dec4rd> 👤 easternbloc 🔍 gavboulton
 9:23:35 AM <•dec4rd>  
 9:23:35 AM <•dec4rd> ⭐ UKHomeOffice/vaultconf#13 Added support for configuring secrets in vault
-9:23:35 AM <•dec4rd> ⭐🔗 https://github.com/UKHomeOffice/vaultconf/pull/13 
+9:23:35 AM <•dec4rd> 🔗 https://github.com/UKHomeOffice/vaultconf/pull/13 
 9:23:35 AM <•dec4rd> 👤 timgent
 9:23:35 AM <•dec4rd>  
 9:23:35 AM <•dec4rd> ⭐ UKHomeOffice/RTM#4 Add a local dev environment based on docker-compose
-9:23:35 AM <•dec4rd> ⭐🔗 https://github.com/UKHomeOffice/RTM/pull/4 
+9:23:35 AM <•dec4rd> 🔗 https://github.com/UKHomeOffice/RTM/pull/4 
 9:23:35 AM <•dec4rd> 👤 daniel-ac-martin
 9:23:35 AM <•dec4rd>  
 9:23:35 AM <•dec4rd> ⭐ UKHomeOffice/removals_dashboard#11 BM-264 unit tests
-9:23:35 AM <•dec4rd> ⭐🔗 https://github.com/UKHomeOffice/removals_dashboard/pull/11 
+9:23:35 AM <•dec4rd> 🔗 https://github.com/UKHomeOffice/removals_dashboard/pull/11 
 9:23:35 AM <•dec4rd> 👤 fulljames 🔍 chrisns
 9:23:35 AM <•dec4rd>  
-```
-
-```shell
-$ docker run -i quay.io/purplebooth/gh-review:$VERSION
-
-  Usage: gh-review [options] <organisationName>
-
-  Review the status of an organisations public github account and score it based on documents present (like READMEs)
-
-  Options:
-
-    -h, --help                 output usage information
-    -V, --version              output the version number
-    -u, --username <username>  GitHub Username (Optional)
-    -p, --password <password>  GitHub Password (Optional)
-    -o, --oauth <oauth>        OAuth2 token to authenticate with (Optional)
-    -i, --createIssues         Create issues for the problems identified, requires authentication (Optional)
-    -s, --publicOnly           Public only, even if authenticated (Optional)
 ```
 
 ## Installing
