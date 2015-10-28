@@ -26,9 +26,33 @@ ANNOUNCE_ROOMS = []
 PARALLELISATION_LIMIT = 10
 CRONTAB = '0 * */3 * * *'
 
+GITHUB_PR_ORGANISATION = process.env.HUBOT_MERGE_SPAM_GITHUB_ORGANISATION if process.env.HUBOT_MERGE_SPAM_GITHUB_ORGANISATION?
+ANNOUNCE_ROOMS = process.env.HUBOT_MERGE_SPAM_ANNOUNCE_ROOMS.split(",") if process.env.HUBOT_MERGE_SPAM_ANNOUNCE_ROOMS?
+
+if(ANNOUNCE_ROOMS.length < 1)
+  console.log("merge spam announcements disabled");
+
+CRONTAB = process.env.HUBOT_MERGE_SPAM_CRON if process.env.HUBOT_MERGE_SPAM_CRON?
 github = null
 
+if(process.env.HUBOT_MERGE_SPAM_GITHUB_AUTH_USERNAME? and process.env.HUBOT_MERGE_SPAM_GITHUB_AUTH_PASSWORD?)
+  github = new Github({
+    username: process.env.HUBOT_MERGE_SPAM_GITHUB_AUTH_USERNAME,
+    password: process.env.HUBOT_MERGE_SPAM_GITHUB_AUTH_PASSWORD,
+    auth: "basic"
+  });
+else
+  github = new Github({})
+
 gitLabMergeRequest = null
+gitlab = null
+
+if(process.env.HUBOT_MERGE_SPAM_GITLAB_HOST? and process.env.HUBOT_MERGE_SPAM_GITLAB_API_TOKEN?)
+  gitlab = (require 'gitlab')
+    url: process.env.HUBOT_MERGE_SPAM_GITLAB_HOST
+    token: process.env.HUBOT_MERGE_SPAM_GITLAB_API_TOKEN
+
+  gitLabMergeRequest = require('gitlab/lib/Models/ProjectMergeRequests')(gitlab.client);
 
 getPullRequestsForOrganisation = (organsation, callback) ->
   github.getUser().orgRepos(
@@ -48,12 +72,14 @@ getPullRequestsForOrganisation = (organsation, callback) ->
                 callback(err, pullRequests);
             )
           (err, results) ->
+            console.log(err) if err
+
             callback(err, [].concat.apply([], results))
         )
   );
 
 sayPullRequests = (say, pullRequests) ->
-  message = "Listing Pull Requests\n\u{2001}\n"
+  message = pullRequests.length+" Pull Requests Waiting\n\u{2001}\n"
 
   for pullRequest in pullRequests
     message += "\u{2B50} #{pullRequest.base.repo.full_name}##{pullRequest.number} #{pullRequest.title}\n"
@@ -62,7 +88,9 @@ sayPullRequests = (say, pullRequests) ->
     message += " \u{1F50D} #{pullRequest.assignee.login}" if pullRequest.assignee
     message += "\n\u{2001}\n"
 
-  say(message) if pullRequests.length > 0
+  if pullRequests
+    console.log("Searching for Pull Requests: found "+ pullRequests.length)
+    say(message)
 
 getMergeRequestForOrganisation = (callback) ->
   gitlab.projects.all (projects) ->
@@ -73,7 +101,6 @@ getMergeRequestForOrganisation = (callback) ->
         gitLabMergeRequest.list(project.id, null, (mergeRequests) ->
           decoratedMergeRequests = []
 
-
           for mergeRequest in mergeRequests
             mergeRequest.project = project
             decoratedMergeRequests.push(mergeRequest)
@@ -81,6 +108,8 @@ getMergeRequestForOrganisation = (callback) ->
           callback(null, decoratedMergeRequests)
         )
       (err, results) ->
+        console.log(err) if err
+
         async.filter(
           [].concat.apply([], results),
           (item, callback) ->
@@ -91,7 +120,7 @@ getMergeRequestForOrganisation = (callback) ->
     )
 
 sayMergeRequests = (say, mergeRequests) ->
-  message = "Listing Merge Requests\n\u{2001}\n"
+  message = mergeRequests.length+" Merge Requests Waiting\n\u{2001}\n"
 
   for mergeRequest in mergeRequests
     message += "\u{2B50} #{mergeRequest.project.name_with_namespace}##{mergeRequest.iid} #{mergeRequest.title}\n"
@@ -100,7 +129,9 @@ sayMergeRequests = (say, mergeRequests) ->
     message += " \u{1F50D} #{mergeRequest.assignee.username}" if mergeRequest.assignee
     message += "\n\u{2001}\n"
 
-  say(message) if mergeRequests.length > 0
+  if(mergeRequests)
+    console.log("Searching for Merge Requests: found "+ mergeRequests.length)
+    say(message)
 
 listMrs = (say)->
   console.log("Listing Merge Requests")
@@ -114,38 +145,14 @@ listPrs = (say)->
   getPullRequestsForOrganisation(
     GITHUB_PR_ORGANISATION
     (err, pullRequests) ->
-      sayPullRequests(say, pullRequests) unless err
+      console.log(err) if err
+      sayPullRequests(say, pullRequests) unless (err? and err != null)
   )
 
 cron = require('cron');
 cronJob = null;
 
 module.exports = (robot) ->
-  GITHUB_PR_ORGANISATION = process.env.HUBOT_MERGE_SPAM_GITHUB_ORGANISATION if process.env.HUBOT_MERGE_SPAM_GITHUB_ORGANISATION
-  ANNOUNCE_ROOMS = process.env.HUBOT_MERGE_SPAM_ANNOUNCE_ROOMS.split(",") if process.env.HUBOT_MERGE_SPAM_ANNOUNCE_ROOMS
-
-  if(ANNOUNCE_ROOMS.length < 1)
-    console.log("merge spam announcements disabled");
-
-  CRONTAB = process.env.HUBOT_MERGE_SPAM_CRON if process.env.HUBOT_MERGE_SPAM_CRON
-
-  if process.env.HUBOT_MERGE_SPAM_GITHUB_AUTH_USERNAME and process.env.HUBOT_MERGE_SPAM_GITHUB_AUTH_PASSWORD
-    github = new Github({
-      username: process.env.HUBOT_MERGE_SPAM_GITHUB_AUTH_USERNAME,
-      password: process.env.HUBOT_MERGE_SPAM_GITHUB_AUTH_PASSWORD,
-      auth: "basic"
-    });
-  else
-    github = new Github({})
-
-  if process.env.HUBOT_MERGE_SPAM_GITLAB_HOST and process.env.HUBOT_MERGE_SPAM_GITLAB_API_TOKEN
-    gitlab = (require 'gitlab')
-      url: process.env.HUBOT_MERGE_SPAM_GITLAB_HOST
-      token: process.env.HUBOT_MERGE_SPAM_GITLAB_API_TOKEN
-
-    gitLabMergeRequest = require('gitlab/lib/Models/ProjectMergeRequests')(gitlab.client);
-
-
   announce = ->
     say = (message) ->
       ANNOUNCE_ROOMS.forEach(
@@ -153,14 +160,20 @@ module.exports = (robot) ->
           robot.messageRoom(room, message)
       )
 
-    if process.env.HUBOT_MERGE_SPAM_GITLAB_HOST and process.env.HUBOT_MERGE_SPAM_GITLAB_API_TOKEN
+    if(gitLabMergeRequest)
       listMrs(say)
 
     if(GITHUB_PR_ORGANISATION)
       listPrs(say)
 
   announce()
-  cronJob = new cron.CronJob(CRONTAB, announce, null, true)
+
+  cronJob = new cron.CronJob(
+    CRONTAB
+    -> announce
+    null
+    true
+  )
 
   if(GITHUB_PR_ORGANISATION)
     robot.respond /l(:?ist)? (:?prs?|pull requests?)/i, (res) ->
@@ -169,7 +182,7 @@ module.exports = (robot) ->
           res.reply(message)
       )
 
-  if process.env.HUBOT_MERGE_SPAM_GITLAB_HOST and process.env.HUBOT_MERGE_SPAM_GITLAB_API_TOKEN
+  if(gitLabMergeRequest)
     robot.respond /l(?:ist)? (:?mrs?|merge requests?)/i, (res) ->
       listMrs(
         (message)->
