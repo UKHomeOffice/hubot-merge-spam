@@ -1,20 +1,27 @@
 {
   "name": "hubot-merge-spam",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Periodically announce to the channel what merge requests are available. Also print them on demand. Supports both GitLab's Merge Requests and GitHubs Pull Requests.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "dependencies": {
+    "async": "^1.5.0",
+    "cron": "^1.0.9",
+    "github-api": "^0.10.6",
+    "gitlab": "^1.4.1"
+  },
+  "engines": {
+    "node": "4.x"
   },
   "keywords": [
     "hubot",
     "hubot-scripts",
     "github",
     "gitlab",
-    "merge",
-    "request",
-    "pull",
-    "request",
+    "merge request",
+    "pull request",
     "chatops"
   ],
   "author": "Billie Thompson <billie@purplebooth.co.uk>",
